@@ -126,6 +126,7 @@ The installation should download packages from devenv’s binary caches. If Nix 
 Devenv runs inside [WSL2](https://learn.microsoft.com/windows/wsl/install).
 
 Install WSL2 and a Linux distribution such as Ubuntu. Then run the Nix and devenv installation commands from inside the WSL2 terminal.
+For full details on setting up devenv on Windows with WSL2, see the official [devenv Windows installation documentation](https://devenv.sh/getting-started/#windows).
 
 #### Uninstalling Nix
 
@@ -165,9 +166,18 @@ After uninstalling, disconnect and reconnect before reinstalling Nix.
    - `run-flutter`: Runs `./run-flutter.sh`
    - `deploy-app`: Runs `./deploy.sh`
 
+> **Note for Windows Users / Running Devenv inside Docker:**
+> If you prefer not to install Nix/WSL2 locally on Windows, you can also run `devenv` inside a Docker container using the official Devenv container image (`ghcr.io/cachix/devenv`):
+> ```bash
+> docker run -it -v "$(pwd):/app" -w /app ghcr.io/cachix/devenv shell
+> ```
+> This gives you a containerized `devenv` shell without needing local Nix installation!
+
 ---
 
 ## 🐳 Option B: Using Docker
+
+Docker provides a completely isolated container environment. Both Docker and Devenv are supported in parallel.
 
 ### Prerequisites for Docker
 
@@ -176,20 +186,49 @@ After uninstalling, disconnect and reconnect before reinstalling Nix.
 
 ### Getting Started with Docker
 
-#### 1. Build the Docker Image
-```bash
-./build-container.sh
-```
+#### For macOS & Linux
 
-#### 2. Start the Docker Container
-```bash
-./start-container.sh
-```
+1. **Build the Docker Image:**
+   ```bash
+   ./build-container.sh
+   ```
 
-#### 3. Initialize Your Firebase Project inside the Container
-```bash
-./init.sh
-```
+2. **Start the Docker Container:**
+   ```bash
+   ./start-container.sh
+   ```
+
+3. **Initialize Your Firebase Project:**
+   Inside the container shell, run:
+   ```bash
+   ./init.sh
+   ```
+
+#### For Windows
+
+##### Option 1: Recommended (Using Git Bash)
+1. Open Git Bash in your project directory.
+2. Run:
+   ```bash
+   ./build-container.sh
+   ./start-container.sh
+   ```
+3. Once inside the container, run `./init.sh`.
+
+##### Option 2: Alternative (Using PowerShell or CMD)
+1. Build the Docker Image:
+   ```powershell
+   docker build -t firebase-project-env -f Dockerfile .
+   ```
+2. Start the Docker Container (PowerShell):
+   ```powershell
+   docker run -it -p 4000:4000 -p 5000:5000 -p 5001:5001 -p 8080:8080 -p 8085:8085 -p 9000:9000 -p 9099:9099 -p 9199:9199 -v "${PWD}:/app" firebase-project-env
+   ```
+   Or in Command Prompt (CMD):
+   ```cmd
+   docker run -it -p 4000:4000 -p 5000:5000 -p 5001:5001 -p 8080:8080 -p 8085:8085 -p 9000:9000 -p 9099:9099 -p 9199:9199 -v "%CD%:/app" firebase-project-env
+   ```
+3. Initialize Your Firebase Project inside the container with `./init.sh`.
 
 ---
 
