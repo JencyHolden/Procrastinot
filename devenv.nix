@@ -12,6 +12,7 @@
     firebase-tools
     openapi-generator-cli
     flutter
+    vscode
   ];
 
   # Convenience scripts exposing native devenv commands
