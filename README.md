@@ -79,19 +79,67 @@ cd my-firebase-project
 
 ## 🛠 Option A: Using Devenv (Recommended)
 
-[devenv.sh](https://devenv.sh) provides developer environments using Nix.
+### Prerequisites for devenv
 
-### Prerequisites for Devenv
+[devenv](https://devenv.sh/) provides reproducible developer environments using Nix.
 
-1. **Install Nix:** Follow the official instructions at [nixos.org](https://nixos.org/download.html) or run:
-   ```bash
-   curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install
-   ```
-2. **Install devenv:** Follow the official guide at [devenv.sh/getting-started](https://devenv.sh/getting-started/):
-   ```bash
-   nix profile add --accept-flake-config github:cachix/devenv/latest
-   ```
-3. **Windows Users:** Devenv runs natively inside **WSL2** (Windows Subsystem for Linux). Install WSL2 first by following [Microsoft WSL Documentation](https://learn.microsoft.com/en-us/windows/wsl/install), then install Nix and devenv inside your WSL2 distro (e.g., Ubuntu).
+#### 1. Install Nix
+
+Install Determinate Nix and configure the current login user as a trusted Nix user:
+
+```bash
+curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install --extra-conf "trusted-users = root $(id -un)"
+```
+
+After installation, close and reopen the terminal. If connected through SSH, disconnect and reconnect.
+
+Verify the installation:
+
+```bash
+nix --version
+```
+
+Verify that the current user is trusted:
+
+```bash
+nix config show trusted-users
+```
+
+The output should include both `root` and your username.
+
+#### 2. Install devenv
+
+```bash
+nix profile add --accept-flake-config github:cachix/devenv/latest
+```
+
+Verify the installation:
+
+```bash
+devenv --version
+```
+
+The installation should download packages from devenv’s binary caches. If Nix reports that the current user is not trusted, stop the installation and correct the trusted-user configuration before continuing.
+
+#### 3. Windows users
+
+Devenv runs inside [WSL2](https://learn.microsoft.com/windows/wsl/install).
+
+Install WSL2 and a Linux distribution such as Ubuntu. Then run the Nix and devenv installation commands from inside the WSL2 terminal.
+
+#### Uninstalling Nix
+
+If Nix was installed using the Determinate installer, uninstall it with:
+
+```bash
+sudo /nix/nix-installer uninstall
+```
+
+This removes the Nix store, Nix profiles, the Nix daemon, and packages installed through Nix. It does not remove project directories or source repositories stored outside `/nix`.
+
+After uninstalling, disconnect and reconnect before reinstalling Nix.
+
+---
 
 ### Getting Started with Devenv
 
