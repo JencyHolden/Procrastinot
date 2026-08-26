@@ -9,7 +9,7 @@
     wget
     jdk21
     nodejs_22
-    nodePackages.firebase-tools
+    firebase-tools
     openapi-generator-cli
     flutter
   ];
