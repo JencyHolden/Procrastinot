@@ -1,0 +1,7 @@
+/mnt/c/Users/jency/my-firebase-project/.devenv/bootstrap/bootstrapLib.nix
+/mnt/c/Users/jency/my-firebase-project/.devenv/bootstrap/default.nix
+/mnt/c/Users/jency/my-firebase-project/.devenv/bootstrap/resolve-lock.nix
+/mnt/c/Users/jency/my-firebase-project/devenv.local.nix
+/mnt/c/Users/jency/my-firebase-project/devenv.lock
+/mnt/c/Users/jency/my-firebase-project/devenv.nix
+/mnt/c/Users/jency/my-firebase-project/devenv.yaml
