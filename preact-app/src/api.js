@@ -1,10 +1,24 @@
 // src/api.js
 import { getAuth } from "firebase/auth";
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL || window.location.origin;
+const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:5001/csc-245-project-v2/us-central1/helloWorld";
+
+// Helper to wait until Firebase determines if a user is logged in (solves race conditions)
+function waitForAuth() {
+  const auth = getAuth();
+  if (auth.currentUser) return Promise.resolve(auth.currentUser);
+
+  return new Promise((resolve) => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      unsubscribe();
+      resolve(user);
+    });
+  });
+}
 
 async function fetchWithAuth(endpoint, options = {}) {
-  const user = getAuth().currentUser;
+  // Wait for auth to finish loading instead of instantly throwing
+  const user = await waitForAuth();
   if (!user) throw new Error("User not authenticated");
 
   const token = await user.getIdToken();
@@ -25,21 +39,21 @@ async function fetchWithAuth(endpoint, options = {}) {
   }
 }
 
-// Export reusable API calls (replace with your endpoints)
+// Export reusable API calls
 export const api = {
-  getRooms: () => fetchWithAuth("/api/rooms"),
+  getRooms: () => fetchWithAuth("/rooms"),
   createRoom: (data) =>
-    fetchWithAuth("/api/rooms", {
+    fetchWithAuth("/rooms", {
       method: "POST",
       body: JSON.stringify(data),
     }),
   joinRoom: (inviteCode) =>
-    fetchWithAuth("/api/rooms/join", {
+    fetchWithAuth("/rooms/join", {
       method: "POST",
       body: JSON.stringify({ inviteCode }),
     }),
   startSession: (roomId, mode) =>
-    fetchWithAuth(`/api/rooms/${roomId}/sessions`, {
+    fetchWithAuth(`/rooms/${roomId}/sessions`, {
       method: "POST",
       body: JSON.stringify({ mode }),
     }),
