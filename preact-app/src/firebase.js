@@ -1,18 +1,20 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore, connectFirestoreEmulator } from "firebase/firestore";
 import { getFunctions, connectFunctionsEmulator } from "firebase/functions";
-import { getAuth, connectAuthEmulator } from "firebase/auth";
+import { getAuth, connectAuthEmulator, GoogleAuthProvider } from "firebase/auth";
 
-// TODO: Replace with your web app's Firebase configuration.
-// You can get this from the Firebase console, or by running:
-// firebase apps:sdkconfig WEB <your-app-id>
+// Import the functions you need from the SDKs you need
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "your-api-key",
-  authDomain: "your-auth-domain",
-  projectId: "your-project-id",
-  storageBucket: "your-storage-bucket",
-  messagingSenderId: "your-messaging-sender-id",
-  appId: "your-app-id"
+  apiKey: "AIzaSyBYUJSgOtyo3OPdqbYLm8rE-lr0icXSVKk",
+  authDomain: "csc-245-project-v2.firebaseapp.com",
+  projectId: "csc-245-project-v2",
+  storageBucket: "csc-245-project-v2.firebasestorage.app",
+  messagingSenderId: "227393401847",
+  appId: "1:227393401847:web:a28d68a5e1d40e190834f2"
 };
 
 // Initialize Firebase
@@ -20,7 +22,7 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const functions = getFunctions(app);
 const auth = getAuth(app);
-
+const googleProvider = new GoogleAuthProvider();
 // Connect to emulators if running locally
 if (window.location.hostname === "localhost") {
   console.log("Development mode: Connecting to local Firebase emulators...");
@@ -31,4 +33,4 @@ if (window.location.hostname === "localhost") {
   console.log("Production mode: Connecting to live Firebase services.");
 }
 
-export { app, db, functions, auth };
+export { app, db, functions, auth, googleProvider };
